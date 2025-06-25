@@ -6,7 +6,7 @@ const API_URL = import.meta.env.VITE_APP_API_URL;
 
 export default function TaskCard({ task, onDeleted, onCompleted }) {
   let deleteTask = async () => {
-    let res = await axios.delete($`{API_URL}/api/tasks/` + task._id);
+    let res = await axios.delete(`${API_URL}/api/tasks/${task._id}`);
     if (res.status === 200) {
       onDeleted(task._id);
     }
