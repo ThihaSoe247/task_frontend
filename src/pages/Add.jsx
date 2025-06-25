@@ -14,7 +14,7 @@ export default function Add() {
     let fetchRecipe = async () => {
       if (id) {
         let res = await axios.get(
-          `${process.env.REACT_APP_API_URL}/api/tasks/${id}`
+          `${import.meta.env.REACT_APP_API_URL}/api/tasks/${id}`
         );
 
         // let res = await axios.get("http://localhost:4000/api/tasks/" + id);
@@ -42,7 +42,7 @@ export default function Add() {
         //   newTask
         // );
         res = await axios.patch(
-          `${process.env.REACT_APP_API_URL}/api/tasks/${id}`,
+          `${import.meta.env.REACT_APP_API_URL}/api/tasks/${id}`,
           newTask
         );
 
@@ -51,7 +51,7 @@ export default function Add() {
         }
       } else {
         res = await axios.post(
-          `${process.env.REACT_APP_API_URL}/api/tasks/`,
+          `${import.meta.env.REACT_APP_API_URL}/api/tasks/`,
           newTask
         );
 

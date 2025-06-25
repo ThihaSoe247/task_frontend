@@ -11,7 +11,7 @@ export default function Home() {
       try {
         // Fixed: Use the correct environment variable name and add fallback
         let response = await fetch(
-          `${process.env.REACT_APP_API_URL}/api/tasks`
+          `${import.meta.env.REACT_APP_API_URL}/api/tasks`
         );
 
         if (!response.ok) throw new Error("Fetch failed");
@@ -34,8 +34,8 @@ export default function Home() {
       // Fixed: Use the same API URL pattern as above
       const response = await fetch(
         `${
-          process.env.REACT_APP_API_URL ||
-          "https://web-crud-task-manage.onrender.com"
+          import.meta.env.REACT_APP_API_URL ||
+          "https://task-backend-s67t.onrender.com/"
         }/api/tasks`
       );
       const data = await response.json();
