@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { Plus, Edit3, ArrowLeft } from "lucide-react";
 
+const API_URL = import.meta.env.VITE_APP_API_URL;
 export default function Add() {
   let [title, setTitle] = useState("");
   let [desc, setDesc] = useState("");
@@ -13,9 +14,7 @@ export default function Add() {
   useEffect(() => {
     let fetchRecipe = async () => {
       if (id) {
-        let res = await axios.get(
-          `${import.meta.env.REACT_APP_API_URL}/api/tasks/${id}`
-        );
+        let res = await axios.get(`${API_URL}/api/tasks/${id}`);
 
         // let res = await axios.get("http://localhost:4000/api/tasks/" + id);
         if (res.status === 200) {
@@ -41,19 +40,13 @@ export default function Add() {
         //   "http://localhost:4000/api/tasks/" + id,
         //   newTask
         // );
-        res = await axios.patch(
-          `${import.meta.env.REACT_APP_API_URL}/api/tasks/${id}`,
-          newTask
-        );
+        res = await axios.patch(`${API_URL}/api/tasks/${id}`, newTask);
 
         if (res.status === 200) {
           navigate("/");
         }
       } else {
-        res = await axios.post(
-          `${import.meta.env.REACT_APP_API_URL}/api/tasks/`,
-          newTask
-        );
+        res = await axios.post(`${API_URL}/api/tasks/`, newTask);
 
         // res = await axios.post("http://localhost:4000/api/tasks/", newTask);
         if (res.status === 201) {

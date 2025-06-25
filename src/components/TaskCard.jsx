@@ -2,16 +2,18 @@ import React from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
+const API_URL = import.meta.env.VITE_APP_API_URL;
+
 export default function TaskCard({ task, onDeleted, onCompleted }) {
   let deleteTask = async () => {
-    let res = await axios.delete("http://localhost:4000/api/tasks/" + task._id);
+    let res = await axios.delete($`{API_URL}/api/tasks/` + task._id);
     if (res.status === 200) {
       onDeleted(task._id);
     }
   };
   let completedBackend = async (e) => {
     try {
-      await axios.patch(`http://localhost:4000/api/tasks/${task._id}`, {
+      await axios.patch($`{API_URL}/api/tasks/${task._id}`, {
         completed: e.target.checked,
       });
       onCompleted();

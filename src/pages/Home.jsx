@@ -3,6 +3,7 @@ import TaskCard from "../components/TaskCard";
 import { Plus, CheckSquare, ListTodo, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 
+const API_URL = import.meta.env.VITE_APP_API_URL;
 export default function Home() {
   let [tasks, setTasks] = useState([]);
 
@@ -10,9 +11,7 @@ export default function Home() {
     let fetchApi = async () => {
       try {
         // Fixed: Use the correct environment variable name and add fallback
-        let response = await fetch(
-          `${import.meta.env.REACT_APP_API_URL}/api/tasks`
-        );
+        let response = await fetch(`${API_URL}/api/tasks`);
 
         if (!response.ok) throw new Error("Fetch failed");
         let data = await response.json();
@@ -32,12 +31,7 @@ export default function Home() {
   let onCompleted = async () => {
     try {
       // Fixed: Use the same API URL pattern as above
-      const response = await fetch(
-        `${
-          import.meta.env.REACT_APP_API_URL ||
-          "https://task-backend-s67t.onrender.com/"
-        }/api/tasks`
-      );
+      const response = await fetch(`${API_URL}/api/tasks`);
       const data = await response.json();
       setTasks(data); // 🔄 reloads all tasks
     } catch (err) {
