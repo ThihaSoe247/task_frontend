@@ -13,7 +13,7 @@ export default function TaskCard({ task, onDeleted, onCompleted }) {
   };
   let completedBackend = async (e) => {
     try {
-      await axios.patch($`{API_URL}/api/tasks/${task._id}`, {
+      await axios.patch(`${API_URL}/api/tasks/${task._id}`, {
         completed: e.target.checked,
       });
       onCompleted();
