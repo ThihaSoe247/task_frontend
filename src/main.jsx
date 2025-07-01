@@ -6,6 +6,8 @@ import Add from "./pages/Add.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import App from "./App.jsx";
+import LogInForm from "./components/LoginForm.jsx";
+import RegisterForm from "./components/RegisterForm.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -22,6 +24,14 @@ const router = createBrowserRouter([
       {
         path: "/tasks/edit/:id",
         element: <Add />,
+      },
+      {
+        path: "/users/login",
+        element: <LogInForm />,
+      },
+      {
+        path: "/users/register",
+        element: <RegisterForm />,
       },
     ],
   },
