@@ -6,7 +6,6 @@ export default function NavBar() {
 
   const token = localStorage.getItem("token");
 
-  // Logout handler example:
   const logout = () => {
     localStorage.removeItem("token");
     navigate("/users/login");
@@ -14,15 +13,14 @@ export default function NavBar() {
 
   return (
     <nav className="flex justify-between items-center p-5 bg-white">
-      <h1 className="font-bold text-2xl text-orange-500">Recipicity</h1>
+      <h1 className="font-bold text-2xl text-orange-500">Tasks</h1>
 
       <ul className="flex space-x-10 items-center">
         {/* Show Home link only if token exists */}
-        {token && (
-          <li className="hover:text-orange-500">
-            <Link to="/">Home</Link>
-          </li>
-        )}
+
+        <li className="hover:text-orange-500">
+          <Link to="/">Home</Link>
+        </li>
 
         <li className="hover:text-orange-500">
           <Link to="/about">About</Link>
@@ -32,7 +30,7 @@ export default function NavBar() {
         </li>
         {token && (
           <li className="hover:text-orange-500">
-            <Link to="/recipes/create">Create Recipe</Link>
+            <Link to="/tasks/add">Create Task</Link>
           </li>
         )}
 

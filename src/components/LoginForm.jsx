@@ -2,6 +2,7 @@ import React from "react";
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "../helpers/axios";
 
 export default function LogInForm() {
   let [email, setEmail] = useState("");
@@ -9,10 +10,29 @@ export default function LogInForm() {
   let [error, setError] = useState(null);
   let navigate = useNavigate();
 
-  //thscp@gmail.com,14122001
+  let login = async (e) => {
+    try {
+      e.preventDefault();
+      setError(null);
+      let data = { email, password };
+      let res = await axios.post(
+        `${import.meta.env.VITE_APP_API_URL}/api/users/login`,
+        data,
+        {
+          withCredentials: true, // only needed if you rely on cookies from backend
+        }
+      );
+      localStorage.setItem("token", res.data.token);
+
+      navigate("/");
+    } catch (e) {
+      console.log("e: :>> ", e.response.data.error);
+      setError(e.response.data.error);
+    }
+  };
   return (
     <form
-      //   onSubmit={}
+      onSubmit={login}
       className="max-w-lg mx-auto border border-4 p-10 border-orange-500"
     >
       <h1 className="text-2xl font-bold text-center text-gray-900 mb-6">

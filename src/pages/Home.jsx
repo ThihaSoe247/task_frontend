@@ -4,25 +4,65 @@ import { Plus, CheckSquare, ListTodo, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const API_URL = import.meta.env.VITE_APP_API_URL;
+
 export default function Home() {
-  let [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
-    let fetchApi = async () => {
+    if (!token) {
+      setLoading(false);
+      return; // Skip fetching if no token
+    }
+
+    const fetchApi = async () => {
       try {
-        // Fixed: Use the correct environment variable name and add fallback
-        let response = await fetch(`${API_URL}/api/tasks`);
+        let response = await fetch(`${API_URL}/api/tasks`, {
+          headers: {
+            Authorization: `Bearer ${token}`, // if your API uses bearer auth
+          },
+        });
 
         if (!response.ok) throw new Error("Fetch failed");
         let data = await response.json();
         setTasks(data);
-        console.log("data.data :>> ", data);
       } catch (err) {
         console.error("Failed to fetch tasks", err);
+      } finally {
+        setLoading(false);
       }
     };
+
     fetchApi();
-  }, []);
+  }, [token]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-gray-700">
+        Loading tasks...
+      </div>
+    );
+  }
+
+  if (!token) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center text-gray-700">
+        <p className="mb-4 text-xl font-semibold">
+          Please log in to see your tasks.
+        </p>
+        <Link
+          to="/users/login"
+          className="text-orange-500 underline font-medium hover:text-orange-600"
+        >
+          Go to Login
+        </Link>
+      </div>
+    );
+  }
+
+  const completedTasks = tasks.filter((task) => task.completed);
+  const pendingTasks = tasks.filter((task) => !task.completed);
 
   let onDeleted = (_id) => {
     setTasks((prev) => prev.filter((task) => task._id !== _id));
@@ -30,17 +70,17 @@ export default function Home() {
 
   let onCompleted = async () => {
     try {
-      // Fixed: Use the same API URL pattern as above
-      const response = await fetch(`${API_URL}/api/tasks`);
+      const response = await fetch(`${API_URL}/api/tasks`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const data = await response.json();
-      setTasks(data); // 🔄 reloads all tasks
+      setTasks(data);
     } catch (err) {
       console.error("Failed to refresh tasks", err);
     }
   };
-
-  const completedTasks = tasks.filter((task) => task.completed);
-  const pendingTasks = tasks.filter((task) => !task.completed);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100">
@@ -63,7 +103,6 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Fixed: Link should wrap the button, not be inside it */}
             <Link to="/tasks/add">
               <button className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 transform hover:scale-105 hover:shadow-lg focus:ring-4 focus:ring-purple-200 focus:outline-none group">
                 <span className="flex items-center gap-2">
@@ -124,7 +163,6 @@ export default function Home() {
       {/* Main Content */}
       <div className="max-w-6xl mx-auto px-6 py-8">
         {tasks.length === 0 ? (
-          /* Empty State */
           <div className="text-center py-16">
             <div className="mb-6">
               <div className="w-24 h-24 bg-gradient-to-r from-purple-200 to-blue-200 rounded-full mx-auto flex items-center justify-center">
@@ -138,7 +176,6 @@ export default function Home() {
               Get started by creating your first task. Stay organized and boost
               your productivity!
             </p>
-            {/* Fixed: Use relative path, not absolute localhost URL */}
             <Link to="/tasks/add">
               <button className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-semibold py-3 px-8 rounded-xl transition-all duration-200 transform hover:scale-105 hover:shadow-lg group">
                 <span className="flex items-center gap-2">
@@ -149,9 +186,7 @@ export default function Home() {
             </Link>
           </div>
         ) : (
-          /* Tasks Grid */
           <div className="space-y-6">
-            {/* Pending Tasks Section */}
             {pendingTasks.length > 0 && (
               <div>
                 <div className="flex items-center gap-2 mb-4">
@@ -177,7 +212,6 @@ export default function Home() {
               </div>
             )}
 
-            {/* Completed Tasks Section */}
             {completedTasks.length > 0 && (
               <div>
                 <div className="flex items-center gap-2 mb-4">
